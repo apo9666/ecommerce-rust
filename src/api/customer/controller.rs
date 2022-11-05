@@ -9,8 +9,13 @@ pub async fn get_customers(client: web::Data<Client>) -> impl Responder {
         .key("sk", AttributeValue::S("teste".into()))
         .table_name("teste")
         .send()
-        .await;
+        .await
+        .expect("get item");
 
-    println!("{:?}", result);
-    HttpResponse::Ok().body("customer")
+    if let Some(item) = result.item {
+        let response = item.get("pk").unwrap().as_s().unwrap();
+        HttpResponse::Ok().body(response.clone())
+    } else {
+        HttpResponse::Ok().body("not ok")
+    }
 }
