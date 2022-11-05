@@ -14,14 +14,34 @@ struct Customer {
     name: String,
 }
 
-pub fn get_s(item: &HashMap<String, AttributeValue>, key: String) -> Option<String> {
+pub fn get_s(
+    item: &HashMap<String, AttributeValue>,
+    key: String,
+) -> Result<String, Box<dyn std::error::Error>> {
+    let value = item
+        .get(&key)
+        .ok_or(format!("{} not set", &key))?
+        .as_s()
+        .map_err(|_| format!("{} expect a string", &key))?
+        .clone();
+
+    Ok(value)
+}
+
+pub fn get_optional_s(
+    item: &HashMap<String, AttributeValue>,
+    key: String,
+) -> Result<Option<String>, Box<dyn std::error::Error>> {
     if let Some(attribute) = item.get(&key) {
-        if let Ok(value) = attribute.as_s() {
-            return Some(value.clone());
-        }
+        let value = attribute
+            .as_s()
+            .map_err(|_| format!("{} expect a string", &key))?
+            .clone();
+
+        return Ok(Some(value));
     }
 
-    None
+    Ok(None)
 }
 
 #[get("/customers/{id}")]
@@ -40,9 +60,9 @@ pub async fn get_customers(
 
     if let Some(item) = result.item {
         let response = Customer {
-            id: get_s(&item, "pk".into()).unwrap(),
-            email: get_s(&item, "email".into()).unwrap(),
-            name: get_s(&item, "name".into()).unwrap(),
+            id: get_s(&item, "pk".into())?,
+            email: get_s(&item, "email".into())?,
+            name: get_s(&item, "name".into())?,
         };
 
         let response = serde_json::to_string(&response).unwrap();
