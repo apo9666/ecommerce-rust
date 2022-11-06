@@ -1,4 +1,6 @@
 mod api;
+mod error;
+mod lib;
 mod routes;
 
 use actix_web::{middleware::Logger, web, App, HttpServer};
