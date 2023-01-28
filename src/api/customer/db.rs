@@ -51,9 +51,9 @@ pub async fn get_customer(client: &Client, id: &String) -> Result<Option<Custome
     match result.item {
         None => Ok(None),
         Some(item) => Ok(Some(Customer {
-            id: get_s(&item, "pk".into())?,
-            email: get_s(&item, "email".into())?,
-            name: get_s(&item, "name".into())?,
+            id: get_s(&item, "pk")?,
+            email: get_s(&item, "email")?,
+            name: get_s(&item, "name")?,
         })),
     }
 }
