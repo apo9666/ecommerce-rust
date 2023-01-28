@@ -5,10 +5,7 @@ use actix_web::{
 };
 use aws_sdk_dynamodb::Client;
 
-use crate::{
-    api::customer::db,
-    error::AppError,
-};
+use crate::{api::customer::db, error::AppError};
 
 #[post("/customers")]
 pub async fn create_customer(

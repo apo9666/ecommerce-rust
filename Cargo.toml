@@ -9,7 +9,9 @@ edition = "2021"
 actix-web = "4.2.1"
 aws-config = "0.51.0"
 aws-sdk-dynamodb = "0.21.0"
-chrono = "0.4.22"
+bcrypt = "0.13"
+boringauth = "0.9.0"
+chrono = { version = "0.4.22", features = ["serde"] }
 env_logger = "0.9.1"
 futures = "0.3.25"
 serde = { version = "1.0.147", features = ["derive"] }
@@ -18,3 +20,5 @@ slog = "2.7.0"
 slog-async = "2.7.0"
 slog-envlogger = "2.2.0"
 slog-term = "2.9.0"
+uuid = { version = "1.2.2", features = ["v4", "serde", "fast-rng","macro-diagnostics"]}
+

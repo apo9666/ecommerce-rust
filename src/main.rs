@@ -7,7 +7,7 @@ mod routes;
 use actix_web::{web, App, HttpServer};
 use aws_sdk_dynamodb as dynamodb;
 use log::{configure_log, Logging};
-use routes::{health_check};
+use routes::health_check;
 use slog::info;
 
 #[actix_web::main]
@@ -25,6 +25,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logging::new(log.clone()))
             .app_data(web::Data::new(client.clone()))
             .configure(health_check::route)
+            .configure(api::user::route::route)
             .configure(api::customer::route::route)
     })
     .bind((host, port))?
