@@ -1,6 +1,7 @@
 use actix_web::{http::StatusCode, HttpResponse, ResponseError};
 use core::fmt;
 use serde::Serialize;
+use slog::{error, Logger};
 
 #[derive(Debug)]
 pub enum AppErrorType {
@@ -24,7 +25,7 @@ pub struct AppErrorResponse {
 
 impl AppError {
     // we are handling the none. function name should match field name
-    fn message(&self) -> String {
+    pub fn message(&self) -> String {
         match &*self {
             // Error message is found then clone otherwise default message
             AppError {

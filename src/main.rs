@@ -6,7 +6,7 @@ mod routes;
 
 use actix_web::{web, App, HttpServer};
 use aws_sdk_dynamodb as dynamodb;
-use log::{configure_log, Logging};
+use log::configure_log;
 use routes::health_check;
 use slog::info;
 
@@ -22,9 +22,10 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .wrap(Logging::new(log.clone()))
             .app_data(web::Data::new(client.clone()))
+            .app_data(web::Data::new(log.clone()))
             .configure(health_check::route)
+            .configure(api::login::route::route)
             .configure(api::user::route::route)
             .configure(api::customer::route::route)
     })
